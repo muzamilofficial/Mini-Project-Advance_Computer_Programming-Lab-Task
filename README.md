@@ -31,76 +31,134 @@ Visualization techniques
 Programming-for-AI-Labs/
 │
 ├── 1/
+
 │   ├── task.py
+
 │   ├── images/
+
 │   └── README.md
+
 │
+
 ├── 2/
+
 │   ├── task.py
+
 │   ├── images/
+
 │   └── README.md
+
 │
+
 ├── 3/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 4/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 5/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 6/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 7/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 8/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 9/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 10/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 11/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 12/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 13/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 ├── 14/
+
 │   ├── task.py
+
 │   └── README.md
+
 │
+
 └── README.md
 
 
 ⚙️ Requirements
 Make sure you have the following installed:
 
-Python 3.x
+. Python 3.x
 
-OpenCV
+. OpenCV
 
-NumPy
+. NumPy
 
-Matplotlib (optional)
+. Matplotlib (optional)
 
 
 🚀 How to Run the Tasks
