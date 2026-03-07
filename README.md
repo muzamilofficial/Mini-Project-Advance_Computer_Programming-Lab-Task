@@ -1,10 +1,11 @@
-Programming for AI – Lab Tasks Repository
+<h1>Programming for AI – Lab Tasks Repository</h1>
 
 This repository contains 14 lab tasks completed as part of the Programming for Artificial Intelligence course. Each task focuses on different concepts related to AI programming, computer vision, and OpenCV APIs, along with other important tools and techniques used in AI development.
 
 The tasks are organized into separate folders (1–14), where each folder contains the code and resources for that specific lab assignment.
 
-📚 Course Topics Covered
+<br>
+<h1>Course Topics Covered</h1>
 
 Some of the major concepts explored in these lab tasks include:
 
@@ -27,7 +28,7 @@ Data handling and preprocessing
 Visualization techniques
 
 
-📁 Repository Structure
+<h1> Repository Structure</h1>
 Programming-for-AI-Labs/
 │
 ├── 1/
@@ -149,7 +150,7 @@ Programming-for-AI-Labs/
 └── README.md
 
 
-⚙️ Requirements
+<h1> Requirements</h1>
 Make sure you have the following installed:
 
 . Python 3.x
@@ -159,9 +160,9 @@ Make sure you have the following installed:
 . NumPy
 
 . Matplotlib (optional)
+<br>
 
-
-🚀 How to Run the Tasks
+<h1>How to Run the Tasks</h1>
 
 1- Clone the repository --> git clone https://github.com/yourusername/programming-for-ai-labs.git
 
