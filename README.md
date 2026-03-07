@@ -162,8 +162,11 @@ Make sure you have the following installed:
 
 
 🚀 How to Run the Tasks
+
 1- Clone the repository --> git clone https://github.com/yourusername/programming-for-ai-labs.git
+
 2- Navigate to the repository --> cd programming-for-ai-labs
+
 3- Run any task --> cd 1 python task.py
 
 
