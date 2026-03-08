@@ -27,7 +27,7 @@ Data handling and preprocessing
 
 Visualization techniques
 
-
+<br>
 <h1> Repository Structure</h1>
 Programming-for-AI-Labs/
 │
@@ -149,7 +149,7 @@ Programming-for-AI-Labs/
 
 └── README.md
 
-
+<br>
 <h1> Requirements</h1>
 Make sure you have the following installed:
 
@@ -160,8 +160,9 @@ Make sure you have the following installed:
 . NumPy
 
 . Matplotlib (optional)
-<br>
 
+
+<br>
 <h1>How to Run the Tasks</h1>
 
 1- Clone the repository --> git clone https://github.com/yourusername/programming-for-ai-labs.git
