@@ -1,4 +1,4 @@
-<div style="background-color: blue;">
+<div style="background-color: lightblue;">
 <h1>Programming for AI – Lab Tasks Repository</h1>
 
 This repository contains 14 lab tasks completed as part of the Programming for Artificial Intelligence course. Each task focuses on different concepts related to AI programming, computer vision, and OpenCV APIs, along with other important tools and techniques used in AI development.
