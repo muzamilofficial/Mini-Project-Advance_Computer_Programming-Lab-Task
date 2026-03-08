@@ -1,3 +1,4 @@
+<div style="background: blue;">
 <h1>Programming for AI – Lab Tasks Repository</h1>
 
 This repository contains 14 lab tasks completed as part of the Programming for Artificial Intelligence course. Each task focuses on different concepts related to AI programming, computer vision, and OpenCV APIs, along with other important tools and techniques used in AI development.
@@ -170,5 +171,4 @@ Make sure you have the following installed:
 
 3- Run any task --> cd 1 python task.py
 
-
-
+</div>
