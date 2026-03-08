@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Extractor</title>
+</head>
+<body>
+
+    <h2>Email Extractor Tool</h2>
+
+    <form method="POST">
+        <input type="text" name="url" placeholder="Paste website URL" required>
+        <button type="submit">Extract Emails</button>
+    </form>
+
+    {% if emails %}
+        <h3>Found Emails:</h3>
+        <ul>
+            {% for email in emails %}
+                <li>{{ email }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</body>
+</html>
