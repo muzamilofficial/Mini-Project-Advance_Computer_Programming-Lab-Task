@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bella Vista – Restaurant Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:         #1a1008;
+      --surface:    #261808;
+      --card:       #2f1e0a;
+      --border:     #4a2e10;
+      --gold:       #d4920a;
+      --gold-lt:    #f0b429;
+      --cream:      #f5ead8;
+      --muted:      #a0856a;
+      --bot-bubble: #3a2410;
+      --usr-bubble: #8b4513;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background-image:
+        radial-gradient(ellipse at 15% 15%, rgba(212,146,10,0.09) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 85%, rgba(139,69,19,0.12) 0%, transparent 55%);
+    }
+
+    /* ── HEADER ── */
+    .header { text-align:center; margin-bottom:22px; animation: fadeDown .6s ease both; }
+    .header .tagline { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+    .header h1 { font-family:'Playfair Display',serif; font-size:clamp(26px,5vw,40px); color:var(--cream); }
+    .header h1 span { color:var(--gold-lt); }
+    .header p  { margin-top:6px; font-size:13px; color:var(--muted); }
+
+    /* ── CHAT WRAPPER ── */
+    .chat-wrap {
+      width:100%; max-width:680px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 24px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(212,146,10,.10);
+      display:flex; flex-direction:column;
+      animation: fadeUp .7s ease both .1s;
+    }
+
+    /* top bar */
+    .topbar {
+      background:var(--surface); border-bottom:1px solid var(--border);
+      padding:13px 20px; display:flex; align-items:center; gap:12px;
+    }
+    .t-avatar {
+      width:40px; height:40px; border-radius:50%;
+      background:linear-gradient(135deg,var(--gold-lt),#a0520a);
+      display:flex; align-items:center; justify-content:center; font-size:18px;
+    }
+    .t-name  { font-family:'Playfair Display',serif; font-size:15px; color:var(--cream); }
+    .t-status{ font-size:12px; color:var(--gold); display:flex; align-items:center; gap:5px; }
+    .dot-on  { width:7px; height:7px; background:#4caf76; border-radius:50%; animation:pulse 2s infinite; }
+
+    /* messages */
+    #chat-box {
+      padding:20px; height:420px; overflow-y:auto;
+      display:flex; flex-direction:column; gap:14px; scroll-behavior:smooth;
+    }
+    #chat-box::-webkit-scrollbar { width:4px; }
+    #chat-box::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+
+    .msg { display:flex; align-items:flex-end; gap:9px; animation:popIn .3s ease both; }
+    .msg.bot  { justify-content:flex-start; }
+    .msg.user { justify-content:flex-end; }
+
+    .m-avatar {
+      width:32px; height:32px; border-radius:50;
+      background:linear-gradient(135deg,var(--gold),#8b4513);
+      display:flex; align-items:center; justify-content:center;
+      font-size:14px; flex-shrink:0; border-radius:50%;
+    }
+    .bubble {
+      max-width:76%; padding:11px 15px; font-size:14px; line-height:1.65;
+      border-radius:18px;
+    }
+    .bot  .bubble { background:var(--bot-bubble); border:1px solid var(--border); border-bottom-left-radius:4px; color:var(--cream); }
+    .user .bubble { background:var(--usr-bubble); border-bottom-right-radius:4px; color:#fff; }
+    .bubble b { color:var(--gold-lt); }
+
+    /* category badge */
+    .badge {
+      display:inline-block; font-size:10px; font-weight:500;
+      padding:2px 9px; border-radius:20px; margin-bottom:5px;
+      background:rgba(212,146,10,.18); color:var(--gold-lt);
+      letter-spacing:.5px; text-transform:uppercase;
+    }
+
+    /* typing */
+    .typing .bubble { display:flex; gap:5px; align-items:center; padding:14px 18px; }
+    .typing .d { width:7px; height:7px; background:var(--muted); border-radius:50%; animation:bounce 1.2s infinite; }
+    .typing .d:nth-child(2) { animation-delay:.2s; }
+    .typing .d:nth-child(3) { animation-delay:.4s; }
+
+    /* quick chips */
+    .chips { display:flex; flex-wrap:wrap; gap:8px; padding:0 20px 14px; }
+    .chip {
+      background:var(--surface); border:1px solid var(--border);
+      color:var(--gold-lt); padding:6px 14px; border-radius:20px;
+      font-size:12px; cursor:pointer; transition:all .2s;
+      font-family:'DM Sans',sans-serif;
+    }
+    .chip:hover { background:var(--gold); color:var(--bg); border-color:var(--gold); transform:translateY(-1px); }
+
+    /* input row */
+    .input-row {
+      display:flex; gap:10px; padding:12px 18px 16px;
+      border-top:1px solid var(--border); background:var(--surface);
+    }
+    #user-input {
+      flex:1; background:var(--bg); border:1px solid var(--border);
+      border-radius:12px; padding:11px 15px;
+      color:var(--cream); font-family:'DM Sans',sans-serif; font-size:14px;
+      outline:none; transition:border-color .2s;
+    }
+    #user-input::placeholder { color:var(--muted); }
+    #user-input:focus { border-color:var(--gold); }
+
+    #send-btn {
+      background:linear-gradient(135deg,var(--gold-lt),var(--gold));
+      border:none; border-radius:12px; width:46px; height:46px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:transform .15s, box-shadow .15s; flex-shrink:0;
+    }
+    #send-btn:hover { transform:scale(1.07); box-shadow:0 4px 14px rgba(212,146,10,.4); }
+    #send-btn:active { transform:scale(.95); }
+    #send-btn svg { width:18px; height:18px; fill:#1a1008; }
+
+    /* footer */
+    .footer { margin-top:14px; font-size:12px; color:var(--muted); text-align:center; animation:fadeUp 1s ease both .3s; }
+
+    /* animations */
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:none} }
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:none} }
+    @keyframes popIn    { from{opacity:0;transform:scale(.88)}        to{opacity:1;transform:scale(1)} }
+    @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.35} }
+    @keyframes bounce   { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="tagline">✦ AI Restaurant Assistant ✦</div>
+    <h1>Bella <span>Vista</span></h1>
+    <p>Powered by SentenceTransformers &amp; FAISS semantic search</p>
+  </div>
+
+  <div class="chat-wrap">
+    <!-- top bar -->
+    <div class="topbar">
+      <div class="t-avatar">🍽️</div>
+      <div>
+        <div class="t-name">Bella Assistant</div>
+        <div class="t-status"><span class="dot-on"></span> Online &amp; ready</div>
+      </div>
+    </div>
+
+    <!-- messages -->
+    <div id="chat-box">
+      <div class="msg bot">
+        <div class="m-avatar">🍽️</div>
+        <div class="bubble">
+          👋 Welcome to <b>Bella Vista</b>! I'm your AI-powered assistant.<br>
+          Ask me about our <b>menu</b>, <b>timings</b>, <b>reservation</b>, <b>delivery</b>, <b>specials</b>, or <b>location</b>!
+        </div>
+      </div>
+    </div>
+
+    <!-- quick chips -->
+    <div class="chips">
+      <button class="chip" onclick="quickAsk('What is on the menu')">🍴 Menu</button>
+      <button class="chip" onclick="quickAsk('What are your opening hours')">🕐 Timings</button>
+      <button class="chip" onclick="quickAsk('How do I make a reservation')">📅 Reservation</button>
+      <button class="chip" onclick="quickAsk('Do you offer home delivery')">🛵 Delivery</button>
+      <button class="chip" onclick="quickAsk('What are today specials')">🌟 Specials</button>
+      <button class="chip" onclick="quickAsk('What is the price range')">💰 Prices</button>
+      <button class="chip" onclick="quickAsk('Where is the restaurant located')">📍 Location</button>
+      <button class="chip" onclick="quickAsk('Do you have free WiFi')">📶 WiFi</button>
+    </div>
+
+    <!-- input -->
+    <div class="input-row">
+      <input id="user-input" type="text" placeholder="Ask me anything…" autocomplete="off"/>
+      <button id="send-btn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="footer">Bella Vista · 12 Gulberg III, Lahore &nbsp;|&nbsp; +92-300-1234567</div>
+
+  <script>
+    const chatBox  = document.getElementById('chat-box');
+    const inputEl  = document.getElementById('user-input');
+
+    inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+
+    function quickAsk(text) { inputEl.value = text; sendMessage(); }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function appendMsg(html, role, category) {
+      const wrap = document.createElement('div');
+      wrap.className = `msg ${role}`;
+      if (role === 'bot') {
+        const badge = category && category !== 'Unknown'
+          ? `<div class="badge">${category}</div>` : '';
+        wrap.innerHTML = `<div class="m-avatar">🍽️</div>
+          <div class="bubble">${badge}${html}</div>`;
+      } else {
+        wrap.innerHTML = `<div class="bubble">${html}</div>`;
+      }
+      chatBox.appendChild(wrap);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function showTyping() {
+      const w = document.createElement('div');
+      w.className = 'msg bot typing'; w.id = 'typing';
+      w.innerHTML = `<div class="m-avatar">🍽️</div>
+        <div class="bubble"><span class="d"></span><span class="d"></span><span class="d"></span></div>`;
+      chatBox.appendChild(w);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    function removeTyping() { const el = document.getElementById('typing'); if(el) el.remove(); }
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      appendMsg(escHtml(text), 'user', '');
+      inputEl.value = '';
+      showTyping();
+      try {
+        const res  = await fetch('/get', {
+          method: 'POST',
+          headers: {'Content-Type':'application/x-www-form-urlencoded'},
+          body: `msg=${encodeURIComponent(text)}`
+        });
+        const data = await res.json();
+        setTimeout(() => {
+          removeTyping();
+          appendMsg(data.response, 'bot', data.category);
+        }, 600);
+      } catch {
+        removeTyping();
+        appendMsg('⚠️ Connection error. Please try again.', 'bot', '');
+      }
+    }
+  </script>
+</body>
+</html>
