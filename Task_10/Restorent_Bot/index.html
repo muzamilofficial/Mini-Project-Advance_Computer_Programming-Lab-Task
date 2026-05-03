@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bella Vista – Restaurant Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #1a1008;
+      --surface:   #261808;
+      --card:      #2f1e0a;
+      --border:    #4a2e10;
+      --gold:      #d4920a;
+      --gold-lt:   #f0b429;
+      --cream:     #f5ead8;
+      --muted:     #a0856a;
+      --bubble-bot:#3a2410;
+      --bubble-usr:#8b4513;
+      --text:      #f5ead8;
+      --radius:    16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(212,146,10,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(139,69,19,0.12) 0%, transparent 60%);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+      animation: fadeDown 0.7s ease both;
+    }
+    .header .logo {
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.1;
+    }
+    .header h1 span { color: var(--gold-lt); }
+    .header p {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ── CHAT WINDOW ── */
+    .chat-wrapper {
+      width: 100%;
+      max-width: 680px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,146,10,0.12);
+      animation: fadeUp 0.8s ease both 0.1s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* top bar */
+    .chat-topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .avatar {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--gold), #a0520a);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .topbar-info .name {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      color: var(--cream);
+    }
+    .topbar-info .status {
+      font-size: 12px;
+      color: var(--gold);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      background: #4caf76;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    /* messages area */
+    #chat-box {
+      padding: 22px 20px;
+      height: 420px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+    }
+    #chat-box::-webkit-scrollbar { width: 4px; }
+    #chat-box::-webkit-scrollbar-track { background: transparent; }
+    #chat-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* message bubbles */
+    .msg {
+      display: flex;
+      align-items: flex-end;
+      gap: 9px;
+      animation: popIn 0.3s ease both;
+    }
+    .msg.bot  { justify-content: flex-start; }
+    .msg.user { justify-content: flex-end; }
+
+    .msg-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), #8b4513);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .bubble {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .bot .bubble {
+      background: var(--bubble-bot);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      color: var(--cream);
+    }
+    .user .bubble {
+      background: var(--bubble-usr);
+      border-bottom-right-radius: 4px;
+      color: #fff;
+    }
+    .bubble b { color: var(--gold-lt); }
+
+    /* typing indicator */
+    .typing .bubble {
+      display: flex; gap: 5px; align-items: center;
+      padding: 14px 18px;
+    }
+    .typing .dot {
+      width: 7px; height: 7px;
+      background: var(--muted);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing .dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    /* quick chips */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 20px 16px;
+    }
+    .chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--gold-lt);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .chip:hover {
+      background: var(--gold);
+      color: var(--bg);
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    /* input row */
+    .input-row {
+      display: flex;
+      gap: 10px;
+      padding: 14px 20px 18px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    #user-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    #user-input::placeholder { color: var(--muted); }
+    #user-input:focus { border-color: var(--gold); }
+
+    #send-btn {
+      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+      border: none;
+      border-radius: 12px;
+      width: 46px;
+      height: 46px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.15s, box-shadow 0.15s;
+      flex-shrink: 0;
+    }
+    #send-btn:hover { transform: scale(1.07); box-shadow: 0 4px 14px rgba(212,146,10,0.4); }
+    #send-btn:active { transform: scale(0.96); }
+    #send-btn svg { width: 18px; height: 18px; fill: #1a1008; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-18px); } to { opacity:1; transform:none; } }
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(22px);  } to { opacity:1; transform:none; } }
+    @keyframes popIn    { from { opacity:0; transform:scale(0.88);       } to { opacity:1; transform:scale(1); } }
+    @keyframes pulse    { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+    @keyframes bounce   { 0%,80%,100%{transform:translateY(0);} 40%{transform:translateY(-6px);} }
+
+    /* footer */
+    .footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      animation: fadeUp 1s ease both 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">✦ Restaurant Assistant ✦</div>
+    <h1>Bella <span>Vista</span></h1>
+    <p>Ask me anything about our restaurant</p>
+  </div>
+
+  <div class="chat-wrapper">
+    <!-- Top bar -->
+    <div class="chat-topbar">
+      <div class="avatar">🍽️</div>
+      <div class="topbar-info">
+        <div class="name">Bella Assistant</div>
+        <div class="status"><span class="status-dot"></span> Online & ready to help</div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="chat-box">
+      <div class="msg bot">
+        <div class="msg-avatar">🍽️</div>
+        <div class="bubble">
+          👋 Welcome to <b>Bella Vista</b>! I'm your personal restaurant assistant.<br>
+          Ask me about our <b>menu</b>, <b>timings</b>, <b>reservations</b>, <b>delivery</b>, or today's <b>specials</b>!
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick chips -->
+    <div class="chips">
+      <button class="chip" onclick="quickAsk('menu')">🍴 Menu</button>
+      <button class="chip" onclick="quickAsk('timings')">🕐 Timings</button>
+      <button class="chip" onclick="quickAsk('reservation')">📅 Reserve a Table</button>
+      <button class="chip" onclick="quickAsk('delivery')">🛵 Delivery</button>
+      <button class="chip" onclick="quickAsk('specials')">🌟 Today\'s Specials</button>
+      <button class="chip" onclick="quickAsk('price')">💰 Prices</button>
+    </div>
+
+    <!-- Input row -->
+    <div class="input-row">
+      <input id="user-input" type="text" placeholder="Type your question…" autocomplete="off" />
+      <button id="send-btn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="footer">Bella Vista Restaurant, Gulberg III, Lahore &nbsp;•&nbsp; +92-300-1234567</div>
+
+  <script>
+    const chatBox   = document.getElementById("chat-box");
+    const inputEl   = document.getElementById("user-input");
+
+    inputEl.addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
+
+    function quickAsk(text) {
+      inputEl.value = text;
+      sendMessage();
+    }
+
+    function appendMsg(html, role) {
+      const wrap   = document.createElement("div");
+      wrap.className = `msg ${role}`;
+      if (role === "bot") {
+        wrap.innerHTML = `<div class="msg-avatar">🍽️</div><div class="bubble">${html}</div>`;
+      } else {
+        wrap.innerHTML = `<div class="bubble">${html}</div>`;
+      }
+      chatBox.appendChild(wrap);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      return wrap;
+    }
+
+    function showTyping() {
+      const wrap = document.createElement("div");
+      wrap.className = "msg bot typing";
+      wrap.id = "typing-indicator";
+      wrap.innerHTML = `<div class="msg-avatar">🍽️</div>
+        <div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+      chatBox.appendChild(wrap);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function removeTyping() {
+      const el = document.getElementById("typing-indicator");
+      if (el) el.remove();
+    }
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      appendMsg(escHtml(text), "user");
+      inputEl.value = "";
+      showTyping();
+
+      try {
+        const res  = await fetch("/get", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `msg=${encodeURIComponent(text)}`
+        });
+        const data = await res.json();
+        setTimeout(() => {
+          removeTyping();
+          appendMsg(data.response, "bot");
+        }, 600);
+      } catch {
+        removeTyping();
+        appendMsg("⚠️ Connection error. Please try again.", "bot");
+      }
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+  </script>
+</body>
+</html>
